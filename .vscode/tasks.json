@@ -15,7 +15,7 @@
         {
             "label": "Build Project",
             "type": "shell",
-            "command": "cmake --build --preset debug",
+            "command": "cmake --build /workspaces/CppCodingDojo/Debug",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -35,11 +35,12 @@
             "detail": "Runs all Catch2 tests, logs the output, and counts the number of failed tests along with the latest Git commit hash and time stamp."
         },
         {
-            "label": "Commit and Run Tests",
+            "label": "Check In",
             "type": "shell",
+            "dependsOrder": "sequence",
             "dependsOn": [
-                "Build Project",
                 "Git Commit All",
+                "Build Project",
                 "Run Catch2 Tests and Log Failures"
             ],
             "problemMatcher": [],
