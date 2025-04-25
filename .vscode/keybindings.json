@@ -1,0 +1,8 @@
+[
+    {
+        "key": "ctrl+d",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Commit and Run Tests",
+        "when": "editorTextFocus"
+    }
+]
