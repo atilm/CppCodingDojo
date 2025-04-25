@@ -13,9 +13,20 @@
             "detail": "Commits all changed and added files with a default commit message."
         },
         {
+            "label": "Build Project",
+            "type": "shell",
+            "command": "cmake --build --preset debug",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "detail": "Builds the project using the 'debug' preset from CMakePresets.json."
+        },
+        {
             "label": "Run Catch2 Tests and Log Failures",
             "type": "shell",
-            "command": "./path/to/your/test/executable --reporter compact | tee test_results.log && grep -c 'failed' test_results.log | xargs -I {} echo \"$(git rev-parse --short HEAD): {} at $(date +'%Y-%m-%d %H:%M:%S')\" > failed_tests_count.log",
+            "command": "./scripts/run_tests.sh",
             "problemMatcher": [],
             "group": {
                 "kind": "test",
@@ -27,11 +38,12 @@
             "label": "Commit and Run Tests",
             "type": "shell",
             "dependsOn": [
+                "Build Project",
                 "Git Commit All",
                 "Run Catch2 Tests and Log Failures"
             ],
             "problemMatcher": [],
             "detail": "Runs the 'Git Commit All' task followed by the 'Run Catch2 Tests and Log Failures' task."
-        }
+        },
     ]
 }
