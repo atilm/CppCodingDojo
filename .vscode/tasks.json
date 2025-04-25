@@ -15,13 +15,13 @@
         {
             "label": "Run Catch2 Tests and Log Failures",
             "type": "shell",
-            "command": "./path/to/your/test/executable --reporter compact | tee test_results.log && grep -c 'failed' test_results.log | xargs -I {} echo \"$(git rev-parse --short HEAD): {}\" > failed_tests_count.log",
+            "command": "./path/to/your/test/executable --reporter compact | tee test_results.log && grep -c 'failed' test_results.log | xargs -I {} echo \"$(git rev-parse --short HEAD): {} at $(date +'%Y-%m-%d %H:%M:%S')\" > failed_tests_count.log",
             "problemMatcher": [],
             "group": {
                 "kind": "test",
                 "isDefault": true
             },
-            "detail": "Runs all Catch2 tests, logs the output, and counts the number of failed tests along with the latest Git commit hash."
+            "detail": "Runs all Catch2 tests, logs the output, and counts the number of failed tests along with the latest Git commit hash and time stamp."
         },
         {
             "label": "Commit and Run Tests",
