@@ -20,45 +20,37 @@ class DigitMask {
     segment_mask mask = 0;
 };
 
-Result parse(const std::string& input) {
-    if (input.empty()) {
-        return {
-            ErrorCode::SUCCESS,
-            {}
-        };
-    }
 
-    std::array<DigitMask, 9> digit_masks;
+class ParserStateMachine {
+    public:
 
-    unsigned int row = 0;
-    unsigned int col = 0;
-
-    for (char c : input) {
+    void next(char c) {
         if (c == '\n') {
             row++;
             col = 0;
-            continue;
+            return;
         }
 
-        unsigned int sub_row = row % 4;
-        unsigned int sub_col = col % 3;
-        unsigned int digit_index = col / 3;
+        sub_row = row % 4;
+        sub_col = col % 3;
+        digit_index = col / 3;
 
         switch (sub_row) {
             case 0:
-                switch (c) {
-                    case ' ':
-                        break;
-                    case '_':
-                        if (sub_col == 1) {
-                            digit_masks[digit_index].set_segment(0);
-                        }
-                        break;
-                    case '|':
-                        break;
-                    default:
-                        break;
-                }
+                handle_row_0(c);
+                // switch (c) {
+                //     case ' ':
+                //         break;
+                //     case '_':
+                //         if (sub_col == 1) {
+                //             digit_masks[digit_index].set_segment(0);
+                //         }
+                //         break;
+                //     case '|':
+                //         break;
+                //     default:
+                //         break;
+                // }
                 break;
             case 1:
             switch (c) {
@@ -109,9 +101,53 @@ Result parse(const std::string& input) {
         col++;
     }
 
+    void handle_row_0(char c) {
+        switch (c) {
+            case ' ':
+                break;
+            case '_':
+                if (sub_col == 1) {
+                    digit_masks[digit_index].set_segment(0);
+                }
+                break;
+            case '|':
+                break;
+            default:
+                break;
+        }
+    }
+
+    const std::array<DigitMask, 9>& get_digit_masks() const {
+        return digit_masks;
+    }
+    
+    private:
+    unsigned int row = 0;
+    unsigned int col = 0;
+    unsigned int sub_row = 0;
+    unsigned int sub_col = 0;
+    unsigned int digit_index = 0;
+    std::array<DigitMask, 9> digit_masks;
+};
+
+Result parse(const std::string& input) {
+    if (input.empty()) {
+        return {
+            ErrorCode::SUCCESS,
+            {}
+        };
+    }
+
+    ParserStateMachine parser;
+
+    for (char c : input) {
+        parser.next(c);
+    }
+
     constexpr segment_mask EIGHT_SEGMENTS = 0b1111111;
     std::string result;
 
+    auto& digit_masks = parser.get_digit_masks();
     for (auto& mask : digit_masks) {
         if (mask == EIGHT_SEGMENTS) {
             result += '8';
