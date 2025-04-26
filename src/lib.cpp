@@ -10,6 +10,6 @@ Result parse(const std::string& input) {
 
     return {
         ErrorCode::SUCCESS,
-        std::vector<std::string>{"1        "}
+        std::vector<std::string>{"888888888"}
     };
 }
