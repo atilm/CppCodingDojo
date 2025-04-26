@@ -20,6 +20,26 @@ class DigitMask {
     segment_mask mask = 0;
 };
 
+struct Segment {
+    unsigned int index;
+    char c;
+    unsigned int row;
+    unsigned int col;
+
+    bool matches(char c, unsigned int row, unsigned int col) const {
+        return this->c == c && this->row == row && this->col == col;
+    }
+};
+
+constexpr Segment segments[7] = {
+    {0, '_', 0, 1},
+    {1, '|', 1, 0},
+    {2, '_', 1, 1},
+    {3, '|', 1, 2},
+    {4, '|', 2, 0},
+    {5, '_', 2, 1},
+    {6, '|', 2, 2}
+};
 
 class ParserStateMachine {
     public:
@@ -35,22 +55,28 @@ class ParserStateMachine {
             return;
         }
 
-
-        switch (sub_row) {
-            case 0:
-                handle_row_0(c);
+        for (const auto& segment : segments) {
+            if (segment.matches(c, sub_row, sub_col)) {
+                digit_masks[digit_index].set_segment(segment.index);
                 break;
-            case 1:
-                handle_row_1(c);
-                break;
-            case 2:
-                handle_row_2(c);
-                break;
-            case 3:
-                break;
-            default:
-                break;
+            }
         }
+
+        // switch (sub_row) {
+        //     case 0:
+        //         handle_row_0(c);
+        //         break;
+        //     case 1:
+        //         handle_row_1(c);
+        //         break;
+        //     case 2:
+        //         handle_row_2(c);
+        //         break;
+        //     case 3:
+        //         break;
+        //     default:
+        //         break;
+        // }
 
         col++;
     }
