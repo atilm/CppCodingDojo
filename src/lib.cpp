@@ -1,5 +1,6 @@
 #include "lib.hpp"
 #include <array>
+#include <map>
 
 typedef unsigned char segment_mask;
 
@@ -10,6 +11,10 @@ class DigitMask {
         if (segment < 7) {
             mask |= (1 << segment);
         }
+    }
+
+    segment_mask get_mask() const {
+        return mask;
     }
 
     bool operator==(const segment_mask other) const {
@@ -39,6 +44,19 @@ constexpr Segment segments[7] = {
     {4, '|', 2, 0},
     {5, '_', 2, 1},
     {6, '|', 2, 2}
+};
+
+const std::map<segment_mask, char> DIGIT_MAP = {
+    // {0b1110111, 0}, // 0
+    // {0b0010010, 1}, // 1
+    // {0b1011101, 2}, // 2
+    // {0b1011011, 3}, // 3
+    // {0b0111010, 4}, // 4
+    // {0b1101011, 5}, // 5
+    // {0b1101111, 6}, // 6
+    // {0b1010010, 7}, // 7
+    {0b1111111, '8'} // 8
+    // {0b1111011, 9}  // 9
 };
 
 class ParserStateMachine {
@@ -84,7 +102,6 @@ Result parse(const std::string& input) {
     }
 
     ParserStateMachine parser;
-
     for (char c : input) {
         parser.next(c);
     }
@@ -94,8 +111,8 @@ Result parse(const std::string& input) {
 
     auto& digit_masks = parser.get_digit_masks();
     for (auto& mask : digit_masks) {
-        if (mask == EIGHT_SEGMENTS) {
-            result += '8';
+        if (DIGIT_MAP.contains(mask.get_mask())) {
+            result += DIGIT_MAP.at(mask.get_mask());
         } else {
             result += '?';
         }
