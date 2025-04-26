@@ -1,6 +1,5 @@
 # Bank OCR To Do
 
-* empty input string
 * whitespace input string
 * other characters
 * non-existing patterns

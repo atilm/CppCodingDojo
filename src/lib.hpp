@@ -10,7 +10,7 @@ enum class ErrorCode {
 
 struct Result {
     ErrorCode Status;
-    std::vector<unsigned int> Numbers;
+    std::vector<std::string> Numbers;
 };
 
 Result parse(const std::string& input);

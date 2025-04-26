@@ -4,7 +4,19 @@
 
 TEST_CASE("parsing an empty string returns an empty vector") {  
     std::string input = "";
-    std::vector<unsigned int> expected = {};
+    std::vector<std::string> expected = {};
+    auto result = parse(input);
+    REQUIRE(result.Status == ErrorCode::SUCCESS);
+    REQUIRE(result.Numbers == expected);
+}
+
+TEST_CASE("parsing a string with one number returns a vector with that number") {  
+    std::string input = ""
+    "                           \n"
+    "  |                        \n"
+    "  |                        \n"
+    "                           \n";
+    std::vector<std::string> expected = {"1        "};
     auto result = parse(input);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
     REQUIRE(result.Numbers == expected);
