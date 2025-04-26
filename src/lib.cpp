@@ -66,20 +66,19 @@ class ParserStateMachine {
         unsigned int sub_col = col % 3;
         unsigned int digit_index = col / 3;
         
-        if (c == '\n') {
-            row++;
-            col = 0;
-            return;
-        }
-
+        
         for (const auto& segment : segments) {
             if (segment.matches(c, sub_row, sub_col)) {
                 digit_masks[digit_index].set_segment(segment.index);
                 break;
             }
         }
-
+        
         col++;
+        if (c == '\n') {
+            row++;
+            col = 0;
+        }
     }
 
     const std::array<DigitMask, 9>& get_digit_masks() const {
