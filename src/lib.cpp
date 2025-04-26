@@ -45,9 +45,9 @@ class ParserStateMachine {
     public:
 
     void next(char c) {
-        sub_row = row % 4;
-        sub_col = col % 3;
-        digit_index = col / 3;
+        unsigned int sub_row = row % 4;
+        unsigned int sub_col = col % 3;
+        unsigned int digit_index = col / 3;
         
         if (c == '\n') {
             row++;
@@ -62,81 +62,7 @@ class ParserStateMachine {
             }
         }
 
-        // switch (sub_row) {
-        //     case 0:
-        //         handle_row_0(c);
-        //         break;
-        //     case 1:
-        //         handle_row_1(c);
-        //         break;
-        //     case 2:
-        //         handle_row_2(c);
-        //         break;
-        //     case 3:
-        //         break;
-        //     default:
-        //         break;
-        // }
-
         col++;
-    }
-
-    void handle_row_0(char c) {
-        switch (c) {
-            case ' ':
-                break;
-            case '_':
-                if (sub_col == 1) {
-                    digit_masks[digit_index].set_segment(0);
-                }
-                break;
-            case '|':
-                break;
-            default:
-                break;
-        }
-    }
-
-    void handle_row_1(char c) {
-        switch (c) {
-            case ' ':
-                break;
-            case '_':
-                if (sub_col == 1) {
-                    digit_masks[digit_index].set_segment(2);
-                }
-                break;
-            case '|':
-                if (sub_col == 0) {
-                    digit_masks[digit_index].set_segment(1);
-                } else if (sub_col == 2) {
-                    digit_masks[digit_index].set_segment(3);
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    void handle_row_2(char c) {
-        switch (c) {
-            case ' ':
-                break;
-            case '_':
-                if (sub_col == 1) {
-                    digit_masks[digit_index].set_segment(5);
-                }
-                break;
-            case '|':
-                if (sub_col == 0) {
-                    digit_masks[digit_index].set_segment(4);
-                } else if (sub_col == 2) {
-                    digit_masks[digit_index].set_segment(6);
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     const std::array<DigitMask, 9>& get_digit_masks() const {
@@ -146,9 +72,6 @@ class ParserStateMachine {
     private:
     unsigned int row = 0;
     unsigned int col = 0;
-    unsigned int sub_row = 0;
-    unsigned int sub_col = 0;
-    unsigned int digit_index = 0;
     std::array<DigitMask, 9> digit_masks;
 };
 
