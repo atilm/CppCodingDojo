@@ -42,44 +42,26 @@ class ParserStateMachine {
             case 1:
                 handle_row_1(c);
                 break;
-            // switch (c) {
-            //     case ' ':
-            //         break;
-            //     case '_':
-            //         if (sub_col == 1) {
-            //             digit_masks[digit_index].set_segment(2);
-            //         }
-            //         break;
-            //     case '|':
-            //         if (sub_col == 0) {
-            //             digit_masks[digit_index].set_segment(1);
-            //         } else if (sub_col == 2) {
-            //             digit_masks[digit_index].set_segment(3);
-            //         }
-            //         break;
-            //     default:
-            //         break;
-            // }
-                // break;
             case 2:
-                switch (c) {
-                    case ' ':
-                        break;
-                    case '_':
-                        if (sub_col == 1) {
-                            digit_masks[digit_index].set_segment(5);
-                        }
-                        break;
-                    case '|':
-                        if (sub_col == 0) {
-                            digit_masks[digit_index].set_segment(4);
-                        } else if (sub_col == 2) {
-                            digit_masks[digit_index].set_segment(6);
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                // switch (c) {
+                //     case ' ':
+                //         break;
+                //     case '_':
+                //         if (sub_col == 1) {
+                //             digit_masks[digit_index].set_segment(5);
+                //         }
+                //         break;
+                //     case '|':
+                //         if (sub_col == 0) {
+                //             digit_masks[digit_index].set_segment(4);
+                //         } else if (sub_col == 2) {
+                //             digit_masks[digit_index].set_segment(6);
+                //         }
+                //         break;
+                //     default:
+                //         break;
+                // }
+                handle_row_2(c);
                 break;
             case 3:
                 break;
@@ -120,6 +102,27 @@ class ParserStateMachine {
                     digit_masks[digit_index].set_segment(1);
                 } else if (sub_col == 2) {
                     digit_masks[digit_index].set_segment(3);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    void handle_row_2(char c) {
+        switch (c) {
+            case ' ':
+                break;
+            case '_':
+                if (sub_col == 1) {
+                    digit_masks[digit_index].set_segment(5);
+                }
+                break;
+            case '|':
+                if (sub_col == 0) {
+                    digit_masks[digit_index].set_segment(4);
+                } else if (sub_col == 2) {
+                    digit_masks[digit_index].set_segment(6);
                 }
                 break;
             default:
