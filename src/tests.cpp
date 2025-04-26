@@ -2,7 +2,6 @@
 #include "catch.hpp"
 #include "lib.hpp"
 
-
 TEST_CASE("parsing an empty string returns an empty vector") {  
     std::string input = "";
     std::vector<unsigned int> expected = {};
