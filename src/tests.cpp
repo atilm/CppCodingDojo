@@ -12,11 +12,11 @@ TEST_CASE("parsing an empty string returns an empty vector") {
 
 TEST_CASE("parsing a string with one number returns a vector with that number") {  
     std::string input = ""
-    "                           \n"
-    "  |                        \n"
-    "  |                        \n"
+    " _  _  _  _  _  _  _  _  _ \n"
+    "|_||_||_||_||_||_||_||_||_|\n"
+    "|_||_||_||_||_||_||_||_||_|\n"
     "                           \n";
-    std::vector<std::string> expected = {"1        "};
+    std::vector<std::string> expected = {"888888888"};
     auto result = parse(input);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
     REQUIRE(result.Numbers == expected);
