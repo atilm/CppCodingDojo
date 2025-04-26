@@ -25,15 +25,16 @@ class ParserStateMachine {
     public:
 
     void next(char c) {
+        sub_row = row % 4;
+        sub_col = col % 3;
+        digit_index = col / 3;
+        
         if (c == '\n') {
             row++;
             col = 0;
             return;
         }
 
-        sub_row = row % 4;
-        sub_col = col % 3;
-        digit_index = col / 3;
 
         switch (sub_row) {
             case 0:
@@ -43,24 +44,6 @@ class ParserStateMachine {
                 handle_row_1(c);
                 break;
             case 2:
-                // switch (c) {
-                //     case ' ':
-                //         break;
-                //     case '_':
-                //         if (sub_col == 1) {
-                //             digit_masks[digit_index].set_segment(5);
-                //         }
-                //         break;
-                //     case '|':
-                //         if (sub_col == 0) {
-                //             digit_masks[digit_index].set_segment(4);
-                //         } else if (sub_col == 2) {
-                //             digit_masks[digit_index].set_segment(6);
-                //         }
-                //         break;
-                //     default:
-                //         break;
-                // }
                 handle_row_2(c);
                 break;
             case 3:
