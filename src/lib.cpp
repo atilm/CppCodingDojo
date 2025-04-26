@@ -3,6 +3,23 @@
 
 typedef unsigned char segment_mask;
 
+class DigitMask {
+    public:
+
+    void set_segment(unsigned int segment) {
+        if (segment < 7) {
+            mask |= (1 << segment);
+        }
+    }
+
+    bool operator==(const segment_mask other) const {
+        return mask == other;    
+    }
+
+    private:
+    segment_mask mask = 0;
+};
+
 Result parse(const std::string& input) {
     if (input.empty()) {
         return {
@@ -11,7 +28,7 @@ Result parse(const std::string& input) {
         };
     }
 
-    std::array<segment_mask, 9> digit_masks = {0};
+    std::array<DigitMask, 9> digit_masks;
 
     unsigned int row = 0;
     unsigned int col = 0;
@@ -34,7 +51,7 @@ Result parse(const std::string& input) {
                         break;
                     case '_':
                         if (sub_col == 1) {
-                            digit_masks[digit_index] |= 0b00000001;
+                            digit_masks[digit_index].set_segment(0);
                         }
                         break;
                     case '|':
@@ -49,14 +66,14 @@ Result parse(const std::string& input) {
                     break;
                 case '_':
                     if (sub_col == 1) {
-                        digit_masks[digit_index] |= 1 << 2;
+                        digit_masks[digit_index].set_segment(2);
                     }
                     break;
                 case '|':
                     if (sub_col == 0) {
-                        digit_masks[digit_index] |= 1 << 1;
+                        digit_masks[digit_index].set_segment(1);
                     } else if (sub_col == 2) {
-                        digit_masks[digit_index] |= 1 << 3;
+                        digit_masks[digit_index].set_segment(3);
                     }
                     break;
                 default:
@@ -69,14 +86,14 @@ Result parse(const std::string& input) {
                         break;
                     case '_':
                         if (sub_col == 1) {
-                            digit_masks[digit_index] |= 1 << 5;
+                            digit_masks[digit_index].set_segment(5);
                         }
                         break;
                     case '|':
                         if (sub_col == 0) {
-                            digit_masks[digit_index] |= 1 << 4;
+                            digit_masks[digit_index].set_segment(4);
                         } else if (sub_col == 2) {
-                            digit_masks[digit_index] |= 1 << 6;
+                            digit_masks[digit_index].set_segment(6);
                         }
                         break;
                     default:
