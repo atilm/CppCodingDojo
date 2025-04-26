@@ -1,5 +1,8 @@
 #include "lib.hpp"
 
-int add(int lhs, int rhs) {
-    return lhs + rhs;
+Result parse(const std::string& input) {
+    return {
+        ErrorCode::ERROR,
+        std::vector<unsigned int>{}
+    };
 }

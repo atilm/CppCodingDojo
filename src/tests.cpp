@@ -7,6 +7,6 @@ TEST_CASE("parsing an empty string returns an empty vector") {
     std::string input = "";
     std::vector<unsigned int> expected = {};
     auto result = parse(input);
-    REQUIRE(result.ErrorCode == ErrorCode::SUCCESS);
+    REQUIRE(result.Status == ErrorCode::SUCCESS);
     REQUIRE(result.Numbers == expected);
 }
