@@ -3,9 +3,10 @@
 #include "lib.hpp"
 
 
-TEST_CASE("add function test") {
-    REQUIRE(add(1, 2) == 3);
-    REQUIRE(add(-1, -1) == -2);
-    REQUIRE(add(0, 0) == 0);
-    REQUIRE(add(100, 200) == 300);
+TEST_CASE("parsing an empty string returns an empty vector") {  
+    std::string input = "";
+    std::vector<unsigned int> expected = {};
+    auto result = parse(input);
+    REQUIRE(result.ErrorCode == ErrorCode::SUCCESS);
+    REQUIRE(result.Numbers == expected);
 }
