@@ -33,3 +33,19 @@ TEST_CASE("parsing a string with all digits can be parsed") {
     REQUIRE(result.Status == ErrorCode::SUCCESS);
     REQUIRE(result.Numbers == expected);
 }
+
+TEST_CASE("a file with two numbers can be parsed") {  
+    std::string input = ""
+    "    _  _     _  _  _  _  _ \n"
+    "  | _| _||_||_ |_   ||_||_|\n"
+    "  ||_  _|  | _||_|  ||_| _|\n"
+    "                           \n"
+    " _  _  _     _  _  _  _  _ \n"
+    " _| _| _||_||_ |_   ||_||_|\n"
+    "|_ |_  _|  | _||_|  ||_| _|\n"
+    "                           \n";
+    std::vector<std::string> expected = {"123456789", "223456789"};
+    auto result = parse(input);
+    REQUIRE(result.Status == ErrorCode::SUCCESS);
+    REQUIRE(result.Numbers == expected);
+}
