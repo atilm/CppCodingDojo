@@ -15,6 +15,11 @@ public:
         }
     }
 
+    void reset()
+    {
+        mask = 0;
+    }
+
     segment_mask get_mask() const
     {
         return mask;
@@ -86,7 +91,25 @@ public:
         {
             row++;
             col = 0;
+
+            if (sub_row == 2)
+            {
+                is_complete_flag = true;
+            }
+            if (row == 3)
+            {
+                is_complete_flag = false;
+                for (auto &mask : digit_masks)
+                {
+                    mask.reset();
+                }
+            }
         }
+    }
+
+    bool is_complete() const
+    {
+        return is_complete_flag;
     }
 
     const std::array<DigitMask, 9> &get_digit_masks() const
@@ -98,6 +121,7 @@ private:
     unsigned int row = 0;
     unsigned int col = 0;
     std::array<DigitMask, 9> digit_masks;
+    bool is_complete_flag = false;
 };
 
 Result parse(const std::string &input)
@@ -115,24 +139,45 @@ Result parse(const std::string &input)
     for (char c : input)
     {
         parser.next(c);
+
+        if (parser.is_complete())
+        {
+            std::string result;
+
+            auto &digit_masks = parser.get_digit_masks();
+            for (auto &mask : digit_masks)
+            {
+                if (DIGIT_MAP.contains(mask.get_mask()))
+                {
+                    result += DIGIT_MAP.at(mask.get_mask());
+                }
+                else
+                {
+                    result += '?';
+                }
+            }
+
+            numbers.emplace_back(result);
+        }
+        
     }
 
-    std::string result;
+    // std::string result;
 
-    auto &digit_masks = parser.get_digit_masks();
-    for (auto &mask : digit_masks)
-    {
-        if (DIGIT_MAP.contains(mask.get_mask()))
-        {
-            result += DIGIT_MAP.at(mask.get_mask());
-        }
-        else
-        {
-            result += '?';
-        }
-    }
+    // auto &digit_masks = parser.get_digit_masks();
+    // for (auto &mask : digit_masks)
+    // {
+    //     if (DIGIT_MAP.contains(mask.get_mask()))
+    //     {
+    //         result += DIGIT_MAP.at(mask.get_mask());
+    //     }
+    //     else
+    //     {
+    //         result += '?';
+    //     }
+    // }
 
-    numbers.emplace_back(result);
+    // numbers.emplace_back(result);
 
     return {
         ErrorCode::SUCCESS,
