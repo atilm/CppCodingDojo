@@ -49,3 +49,8 @@ TEST_CASE("a file with two numbers can be parsed") {
     REQUIRE(result.Status == ErrorCode::SUCCESS);
     REQUIRE(result.Numbers == expected);
 }
+
+TEST_CASE("a number can be validated correctly") {
+    bool result = is_valid("345882865");
+    REQUIRE(result == true);
+}

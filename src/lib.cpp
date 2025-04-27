@@ -160,3 +160,8 @@ Result parse(const std::string &input)
         ErrorCode::SUCCESS,
         numbers};
 }
+
+bool is_valid(const std::string& number)
+{
+    false;
+}

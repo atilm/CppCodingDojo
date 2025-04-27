@@ -14,3 +14,5 @@ struct Result {
 };
 
 Result parse(const std::string& input);
+
+bool is_valid(const std::string& number);
