@@ -163,5 +163,5 @@ Result parse(const std::string &input)
 
 bool is_valid(const std::string& number)
 {
-    false;
+    return false;
 }
