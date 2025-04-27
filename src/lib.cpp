@@ -57,6 +57,7 @@ constexpr Segment segments[7] = {
     {6, '|', 2, 2}};
 
 const std::map<segment_mask, char> DIGIT_MAP = {
+    {0b1111011, '0'}, // 0
     {0b1001000, '1'}, // 1
     {0b0111101, '2'}, // 2
     {0b1101101, '3'}, // 3
