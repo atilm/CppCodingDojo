@@ -54,3 +54,26 @@ TEST_CASE("a number can be validated correctly") {
     bool result = is_valid("345882865");
     REQUIRE(result == true);
 }
+
+TEST_CASE("illegible and invalid numbers are marked in the result") {
+    std::string input = ""
+    "    _  _  _  _  _  _  _  _ \n"
+    "|_||_   ||_ | ||_|| || || |\n"
+    "  | _|  | _||_||_||_||_||_|\n"
+    "                           \n"
+    " _  _     _  _        _  _ \n"
+    "|_ |_ |_| _|  |  ||_||_||_ \n"
+    "|_||_|  | _|  |  |  | _| _|\n"
+    "                           \n"
+    " _  _        _  _  _  _  _ \n"
+    "|_||_   |  || | _||_| _||_ \n"
+    "|_||_|  |  ||_||_|| | _||_|\n"
+    "                           \n";
+    std::vector<std::string> expected = {"457508000", "664371495 ERR", "86110??36 ILL"};
+    auto result = parse(input);
+    REQUIRE(result.Status == ErrorCode::SUCCESS);
+    REQUIRE(result.Numbers == expected);
+}
+
+
+
