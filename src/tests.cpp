@@ -41,10 +41,10 @@ TEST_CASE("a file with two numbers can be parsed") {
     "  ||_  _|  | _||_|  ||_| _|\n"
     "                           \n"
     " _  _  _     _  _  _  _  _ \n"
-    " _| _| _||_||_ |_   ||_||_|\n"
-    "|_ |_  _|  | _||_|  ||_| _|\n"
+    "| | _| _||_||_ |_   ||_||_|\n"
+    "|_||_  _|  | _||_|  ||_| _|\n"
     "                           \n";
-    std::vector<std::string> expected = {"123456789", "223456789"};
+    std::vector<std::string> expected = {"123456789", "023456789"};
     auto result = parse(input);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
     REQUIRE(result.Numbers == expected);
