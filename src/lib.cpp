@@ -163,5 +163,14 @@ Result parse(const std::string &input)
 
 bool is_valid(const std::string& number)
 {
-    return false;
+    unsigned int checksum = 0;
+    unsigned int weight = number.length();
+    for (auto c : number)
+    {
+        unsigned int digit = c - '0';
+        checksum += digit * weight;
+        weight--;
+    }
+
+    return checksum % 11 == 0;
 }
