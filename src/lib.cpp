@@ -73,6 +73,7 @@ class ParserStateMachine
 public:
     void next(char c)
     {
+        is_complete_flag = false;
         unsigned int sub_row = row % 4;
         unsigned int sub_col = col % 3;
         unsigned int digit_index = col / 3;
@@ -96,9 +97,8 @@ public:
             {
                 is_complete_flag = true;
             }
-            if (row == 3)
+            if (sub_row == 3)
             {
-                is_complete_flag = false;
                 for (auto &mask : digit_masks)
                 {
                     mask.reset();
