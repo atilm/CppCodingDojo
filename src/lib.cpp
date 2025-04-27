@@ -134,7 +134,6 @@ Result parse(const std::string &input)
     }
 
     std::vector<std::string> numbers;
-
     ParserStateMachine parser;
     for (char c : input)
     {
@@ -147,37 +146,14 @@ Result parse(const std::string &input)
             auto &digit_masks = parser.get_digit_masks();
             for (auto &mask : digit_masks)
             {
-                if (DIGIT_MAP.contains(mask.get_mask()))
-                {
-                    result += DIGIT_MAP.at(mask.get_mask());
-                }
-                else
-                {
-                    result += '?';
-                }
+                result += DIGIT_MAP.contains(mask.get_mask())
+                              ? DIGIT_MAP.at(mask.get_mask())
+                              : '?';
             }
 
             numbers.emplace_back(result);
         }
-        
     }
-
-    // std::string result;
-
-    // auto &digit_masks = parser.get_digit_masks();
-    // for (auto &mask : digit_masks)
-    // {
-    //     if (DIGIT_MAP.contains(mask.get_mask()))
-    //     {
-    //         result += DIGIT_MAP.at(mask.get_mask());
-    //     }
-    //     else
-    //     {
-    //         result += '?';
-    //     }
-    // }
-
-    // numbers.emplace_back(result);
 
     return {
         ErrorCode::SUCCESS,
