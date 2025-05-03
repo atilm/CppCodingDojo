@@ -35,14 +35,34 @@ public:
         return DIGIT_MAP.contains(mask);
     }
 
-    char to_char() const
+    char to_char(bool auto_correct = false) const
     {
         if (is_valid())
         {
             return DIGIT_MAP.at(mask);
         }
 
-        return '?';
+        if (!auto_correct)
+        {
+            return '?';
+        }
+
+        // auto-correct
+        constexpr unsigned int NUMBER_OF_SEGMENTS = 7;
+        unsigned int number_of_matches = 0;
+        char match = 0;
+
+        for (unsigned int i = 0; i < NUMBER_OF_SEGMENTS; ++i)
+        {
+            segment_mask candidate = mask ^ (1 << i);
+            if (DIGIT_MAP.contains(candidate))
+            {
+                number_of_matches++;
+                match += DIGIT_MAP.at(candidate);
+            }
+        }
+
+        return (number_of_matches == 1) ? match : '?';
     }
 
     void reset()
@@ -165,34 +185,7 @@ Result parse(const std::string &input, bool validate, bool auto_correct)
             for (auto &mask : digit_masks)
             {
                 segment_mask digit_mask = mask.get_mask();
-                if (mask.is_valid())
-                {
-                    result += mask.to_char();
-                    continue;
-                }
-
-                if (auto_correct)
-                {
-                    constexpr unsigned int NUMBER_OF_SEGMENTS = 7;
-                    unsigned int number_of_matches = 0;
-                    char match = 0;
-
-                    for (unsigned int i = 0; i < NUMBER_OF_SEGMENTS; ++i)
-                    {
-                        segment_mask candidate = digit_mask ^ (1 << i);
-                        if (DIGIT_MAP.contains(candidate))
-                        {
-                            number_of_matches++;
-                            match += DIGIT_MAP.at(candidate);
-                        }
-                    }
-
-                    result += (number_of_matches == 1) ? match : '?';
-                }
-                else
-                {
-                    result += '?';
-                }
+                result += mask.to_char(auto_correct);
             }
 
             if (validate)
