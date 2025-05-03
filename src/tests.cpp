@@ -7,7 +7,7 @@ TEST_CASE("parsing an empty string returns an empty vector") {
     std::vector<std::string> expected = {};
     auto result = parse(input);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
-    REQUIRE(result.Numbers == expected);
+    REQUIRE(result.Value == expected);
 }
 
 TEST_CASE("parsing a string with all eights can be parsed") {  
@@ -19,7 +19,7 @@ TEST_CASE("parsing a string with all eights can be parsed") {
     std::vector<std::string> expected = {"888888888"};
     auto result = parse(input);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
-    REQUIRE(result.Numbers == expected);
+    REQUIRE(result.Value == expected);
 }
 
 TEST_CASE("parsing a string with all digits can be parsed") {  
@@ -31,7 +31,7 @@ TEST_CASE("parsing a string with all digits can be parsed") {
     std::vector<std::string> expected = {"123456789"};
     auto result = parse(input);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
-    REQUIRE(result.Numbers == expected);
+    REQUIRE(result.Value == expected);
 }
 
 TEST_CASE("a file with two numbers can be parsed") {  
@@ -47,7 +47,7 @@ TEST_CASE("a file with two numbers can be parsed") {
     std::vector<std::string> expected = {"123456789", "023456789"};
     auto result = parse(input);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
-    REQUIRE(result.Numbers == expected);
+    REQUIRE(result.Value == expected);
 }
 
 TEST_CASE("a number can be validated correctly") {
@@ -72,7 +72,7 @@ TEST_CASE("illegible and invalid numbers are marked in the result") {
     std::vector<std::string> expected = {"457508000", "664371495 ERR", "86110??36 ILL"};
     auto result = parse(input, true);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
-    REQUIRE(result.Numbers == expected);
+    REQUIRE(result.Value == expected);
 }
 
 TEST_CASE("one ill segment can be auto-corrected") {  
@@ -84,6 +84,6 @@ TEST_CASE("one ill segment can be auto-corrected") {
     std::vector<std::string> expected = {"888888888"};
     auto result = parse(input, false, true);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
-    REQUIRE(result.Numbers == expected);
+    REQUIRE(result.Value == expected);
 }
 

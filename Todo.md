@@ -1,5 +1,7 @@
 # Bank OCR To Do
 
+* complete refactoring to usage of error codes
+
 * whitespace input string
 * multiple whitespace lines between numbers
 * no empty line

@@ -19,6 +19,20 @@ const std::map<segment_mask, char> DIGIT_MAP = {
     {0b1101111, '9'}  // 9
 };
 
+enum class ParserError
+{
+    OK = 0,
+    NotADigit = 1,
+    NotValid = 2,
+    Ambiguous = 3,
+};
+
+const std::map<ParserError, std::string> ERROR_MESSAGES = {
+    {ParserError::OK, ""},
+    {ParserError::NotADigit, " ILL"},
+    {ParserError::NotValid, " ERR"},
+    {ParserError::Ambiguous, " AMB"}};
+
 class DigitMask
 {
 public:
@@ -35,16 +49,16 @@ public:
         return DIGIT_MAP.contains(mask);
     }
 
-    char to_char(bool auto_correct = false) const
+    Result<ParserError, char> to_char(bool auto_correct = false) const
     {
         if (is_valid())
         {
-            return DIGIT_MAP.at(mask);
+            return {ParserError::OK, DIGIT_MAP.at(mask)};
         }
 
         if (!auto_correct)
         {
-            return '?';
+            return {ParserError::NotADigit, '?'};
         }
 
         // auto-correct
@@ -62,7 +76,12 @@ public:
             }
         }
 
-        return (number_of_matches == 1) ? match : '?';
+        if (number_of_matches == 1)
+        {
+            return {ParserError::OK, match};
+        }
+
+        return {ParserError::NotADigit, '?'};
     }
 
     void reset()
@@ -162,7 +181,7 @@ private:
     bool is_complete_flag = false;
 };
 
-Result parse(const std::string &input, bool validate, bool auto_correct)
+Result<ErrorCode, std::vector<std::string>> parse(const std::string &input, bool validate, bool auto_correct)
 {
     if (input.empty())
     {
@@ -185,7 +204,7 @@ Result parse(const std::string &input, bool validate, bool auto_correct)
             for (auto &mask : digit_masks)
             {
                 segment_mask digit_mask = mask.get_mask();
-                result += mask.to_char(auto_correct);
+                result += mask.to_char(auto_correct).Value;
             }
 
             if (validate)

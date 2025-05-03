@@ -8,11 +8,12 @@ enum class ErrorCode {
     ERROR = 1
 };
 
+template <typename T, typename U>
 struct Result {
-    ErrorCode Status;
-    std::vector<std::string> Numbers;
+    T Status;
+    U Value;
 };
 
-Result parse(const std::string& input, bool validate = false, bool auto_correct = false);
+Result<ErrorCode, std::vector<std::string>> parse(const std::string& input, bool validate = false, bool auto_correct = false);
 
 bool is_valid(const std::string& number);
