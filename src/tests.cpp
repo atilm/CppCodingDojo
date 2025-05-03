@@ -70,7 +70,7 @@ TEST_CASE("illegible and invalid numbers are marked in the result") {
     "|_||_|  |  ||_||_|| | _||_|\n"
     "                           \n";
     std::vector<std::string> expected = {"457508000", "664371495 ERR", "86110??36 ILL"};
-    auto result = parse(input);
+    auto result = parse(input, true);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
     REQUIRE(result.Numbers == expected);
 }

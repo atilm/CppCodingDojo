@@ -4,6 +4,8 @@
 
 typedef unsigned char segment_mask;
 
+constexpr unsigned int MAX_DIGITS = 9;
+
 class DigitMask
 {
 public:
@@ -113,7 +115,7 @@ public:
         return is_complete_flag;
     }
 
-    const std::array<DigitMask, 9> &get_digit_masks() const
+    const std::array<DigitMask, MAX_DIGITS> &get_digit_masks() const
     {
         return digit_masks;
     }
@@ -121,11 +123,11 @@ public:
 private:
     unsigned int row = 0;
     unsigned int col = 0;
-    std::array<DigitMask, 9> digit_masks;
+    std::array<DigitMask, MAX_DIGITS> digit_masks;
     bool is_complete_flag = false;
 };
 
-Result parse(const std::string &input)
+Result parse(const std::string &input, bool validate)
 {
     if (input.empty())
     {
@@ -150,6 +152,18 @@ Result parse(const std::string &input)
                 result += DIGIT_MAP.contains(mask.get_mask())
                               ? DIGIT_MAP.at(mask.get_mask())
                               : '?';
+            }
+
+            if (validate)
+            {
+                if (result.find('?') != std::string::npos)
+                {
+                    result += " ILL";
+                }
+                else if (!is_valid(result))
+                {
+                    result += " ERR";
+                }
             }
 
             numbers.emplace_back(result);
