@@ -6,8 +6,8 @@
 * unexpected input line length
 * auto corrections
     * correct unknown patterns
+    * mark ambiguous number
     * correct several unknown patterns
     * correct invalid number
     * do not correct unknown pattern and invalid number at once
-    * mark ambiguous number
 

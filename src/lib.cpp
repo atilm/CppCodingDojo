@@ -6,6 +6,19 @@ typedef unsigned char segment_mask;
 
 constexpr unsigned int MAX_DIGITS = 9;
 
+const std::map<segment_mask, char> DIGIT_MAP = {
+    {0b1111011, '0'}, // 0
+    {0b1001000, '1'}, // 1
+    {0b0111101, '2'}, // 2
+    {0b1101101, '3'}, // 3
+    {0b1001110, '4'}, // 4
+    {0b1100111, '5'}, // 5
+    {0b1110111, '6'}, // 6
+    {0b1001001, '7'}, // 7
+    {0b1111111, '8'}, // 8
+    {0b1101111, '9'}  // 9
+};
+
 class DigitMask
 {
 public:
@@ -15,6 +28,21 @@ public:
         {
             mask |= (1 << segment);
         }
+    }
+
+    bool is_valid() const
+    {
+        return DIGIT_MAP.contains(mask);
+    }
+
+    char to_char() const
+    {
+        if (is_valid())
+        {
+            return DIGIT_MAP.at(mask);
+        }
+
+        return '?';
     }
 
     void reset()
@@ -57,19 +85,6 @@ constexpr Segment segments[7] = {
     {4, '|', 2, 0},
     {5, '_', 2, 1},
     {6, '|', 2, 2}};
-
-const std::map<segment_mask, char> DIGIT_MAP = {
-    {0b1111011, '0'}, // 0
-    {0b1001000, '1'}, // 1
-    {0b0111101, '2'}, // 2
-    {0b1101101, '3'}, // 3
-    {0b1001110, '4'}, // 4
-    {0b1100111, '5'}, // 5
-    {0b1110111, '6'}, // 6
-    {0b1001001, '7'}, // 7
-    {0b1111111, '8'}, // 8
-    {0b1101111, '9'}  // 9
-};
 
 class ParserStateMachine
 {
@@ -149,15 +164,42 @@ Result parse(const std::string &input, bool validate, bool auto_correct)
             auto &digit_masks = parser.get_digit_masks();
             for (auto &mask : digit_masks)
             {
-                result += DIGIT_MAP.contains(mask.get_mask())
-                              ? DIGIT_MAP.at(mask.get_mask())
-                              : '?';
+                segment_mask digit_mask = mask.get_mask();
+                if (mask.is_valid())
+                {
+                    result += mask.to_char();
+                    continue;
+                }
+
+                if (auto_correct)
+                {
+                    constexpr unsigned int NUMBER_OF_SEGMENTS = 7;
+                    unsigned int number_of_matches = 0;
+                    char match = 0;
+
+                    for (unsigned int i = 0; i < NUMBER_OF_SEGMENTS; ++i)
+                    {
+                        segment_mask candidate = digit_mask ^ (1 << i);
+                        if (DIGIT_MAP.contains(candidate))
+                        {
+                            number_of_matches++;
+                            match += DIGIT_MAP.at(candidate);
+                        }
+                    }
+
+                    result += (number_of_matches == 1) ? match : '?';
+                }
+                else
+                {
+                    result += '?';
+                }
             }
 
             if (validate)
             {
                 if (result.find('?') != std::string::npos)
                 {
+
                     result += " ILL";
                 }
                 else if (!is_valid(result))
@@ -175,7 +217,7 @@ Result parse(const std::string &input, bool validate, bool auto_correct)
         numbers};
 }
 
-bool is_valid(const std::string& number)
+bool is_valid(const std::string &number)
 {
     unsigned int checksum = 0;
     unsigned int weight = number.length();

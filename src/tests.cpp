@@ -75,14 +75,14 @@ TEST_CASE("illegible and invalid numbers are marked in the result") {
     REQUIRE(result.Numbers == expected);
 }
 
-TEST_CASE("obviously incorrect numbers are auto-corrected by adding one segment") {  
+TEST_CASE("one ill segment can be auto-corrected") {  
     std::string input = ""
-    "    _  _  _  _  _  _  _  _ \n"
-    "|_||_||_||_|  ||_||_||_||_|\n"
-    "|_||_||_ | |   |_||_||_||_|\n"
+    " _  _  _  _  _  _  _  _  _ \n"
+    "|_||_||_||_||_||_||_||_||_|\n"
+    "|_||_||_|| ||_||_||_||_||_|\n"
     "                           \n";
-    std::vector<std::string> expected = {"888878888"};
-    auto result = parse(input, true, true);
+    std::vector<std::string> expected = {"888888888"};
+    auto result = parse(input, false, true);
     REQUIRE(result.Status == ErrorCode::SUCCESS);
     REQUIRE(result.Numbers == expected);
 }
