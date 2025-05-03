@@ -13,6 +13,6 @@ struct Result {
     std::vector<std::string> Numbers;
 };
 
-Result parse(const std::string& input, bool validate = false);
+Result parse(const std::string& input, bool validate = false, bool auto_correct = false);
 
 bool is_valid(const std::string& number);

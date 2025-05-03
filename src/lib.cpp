@@ -127,7 +127,7 @@ private:
     bool is_complete_flag = false;
 };
 
-Result parse(const std::string &input, bool validate)
+Result parse(const std::string &input, bool validate, bool auto_correct)
 {
     if (input.empty())
     {
