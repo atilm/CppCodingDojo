@@ -200,24 +200,27 @@ Result<ErrorCode, std::vector<std::string>> parse(const std::string &input, bool
         {
             std::string result;
 
+            ParserError error = ParserError::OK;
             auto &digit_masks = parser.get_digit_masks();
             for (auto &mask : digit_masks)
             {
                 segment_mask digit_mask = mask.get_mask();
-                result += mask.to_char(auto_correct).Value;
+                auto [digit_error, digit] = mask.to_char(auto_correct);
+                result += digit;
+                if (digit_error != ParserError::OK)
+                {
+                    error = digit_error;
+                }
             }
 
             if (validate)
             {
-                if (result.find('?') != std::string::npos)
+                if (error == ParserError::OK && !is_valid(result))
                 {
+                    error = ParserError::NotValid;
+                }
 
-                    result += " ILL";
-                }
-                else if (!is_valid(result))
-                {
-                    result += " ERR";
-                }
+                result += ERROR_MESSAGES.at(error);
             }
 
             numbers.emplace_back(result);
