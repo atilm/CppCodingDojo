@@ -87,3 +87,26 @@ TEST_CASE("one ill segment can be auto-corrected") {
     REQUIRE(result.Value == expected);
 }
 
+TEST_CASE("ambiguous segments are recognized by auto correction") {  
+    std::string input = ""
+    " _  _  _  _  _  _  _  _  _ \n"
+    "|_||_||_||_||_| _||_||_||_|\n"
+    "|_||_||_||_||_||_||_||_||_|\n"
+    "                           \n";
+    std::vector<std::string> expected = {"88888?888 AMB"};
+    auto result = parse(input, true, true);
+    REQUIRE(result.Status == ErrorCode::SUCCESS);
+    REQUIRE(result.Value == expected);
+}
+
+TEST_CASE("illegible digits override ambiguous segments in error message") {  
+    std::string input = ""
+    " _  _  _  _  _  _  _  _  _ \n"
+    "|_||_||_||_||   _||_||_||_|\n"
+    "|_||_||_||_||  |_||_||_||_|\n"
+    "                           \n";
+    std::vector<std::string> expected = {"8888??888 ILL"};
+    auto result = parse(input, true, true);
+    REQUIRE(result.Status == ErrorCode::SUCCESS);
+    REQUIRE(result.Value == expected);
+}

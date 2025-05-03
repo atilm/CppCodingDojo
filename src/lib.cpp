@@ -22,10 +22,16 @@ const std::map<segment_mask, char> DIGIT_MAP = {
 enum class ParserError
 {
     OK = 0,
-    NotADigit = 1,
-    NotValid = 2,
-    Ambiguous = 3,
+    NotValid = 1,
+    Ambiguous = 2,
+    NotADigit = 3,
 };
+
+ParserError operator|=(ParserError &lhs, ParserError rhs)
+{
+    lhs = static_cast<ParserError>(std::max(static_cast<int>(lhs), static_cast<int>(rhs)));
+    return lhs;
+}
 
 const std::map<ParserError, std::string> ERROR_MESSAGES = {
     {ParserError::OK, ""},
@@ -79,6 +85,10 @@ public:
         if (number_of_matches == 1)
         {
             return {ParserError::OK, match};
+        }
+        else if (number_of_matches > 1)
+        {
+            return {ParserError::Ambiguous, '?'};
         }
 
         return {ParserError::NotADigit, '?'};
@@ -207,10 +217,7 @@ Result<ErrorCode, std::vector<std::string>> parse(const std::string &input, bool
                 segment_mask digit_mask = mask.get_mask();
                 auto [digit_error, digit] = mask.to_char(auto_correct);
                 result += digit;
-                if (digit_error != ParserError::OK)
-                {
-                    error = digit_error;
-                }
+                error |= digit_error;
             }
 
             if (validate)
