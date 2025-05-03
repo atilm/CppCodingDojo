@@ -44,9 +44,17 @@ class DigitMask
 public:
     void set_segment(unsigned int segment)
     {
-        if (segment < 7)
+        if (segment < NUMBER_OF_SEGMENTS)
         {
             mask |= (1 << segment);
+        }
+    }
+
+    void toggle_segment(unsigned int segment)
+    {
+        if (segment < NUMBER_OF_SEGMENTS)
+        {
+            mask ^= (1 << segment);
         }
     }
 
@@ -68,7 +76,6 @@ public:
         }
 
         // auto-correct
-        constexpr unsigned int NUMBER_OF_SEGMENTS = 7;
         unsigned int number_of_matches = 0;
         char match = 0;
 
@@ -110,6 +117,7 @@ public:
     }
 
 private:
+    const unsigned int NUMBER_OF_SEGMENTS = 7;
     segment_mask mask = 0;
 };
 
@@ -191,6 +199,43 @@ private:
     bool is_complete_flag = false;
 };
 
+Result<ParserError, std::string> to_string(std::array<DigitMask, MAX_DIGITS> &digit_masks, bool auto_correct)
+{
+    std::string result;
+    ParserError error = ParserError::OK;
+    for (auto &mask : digit_masks)
+    {
+        segment_mask digit_mask = mask.get_mask();
+        auto [digit_error, digit] = mask.to_char(auto_correct);
+        result += digit;
+        error |= digit_error;
+    }
+
+    return {error, result};
+}
+
+Result<ParserError, std::string> auto_correction(std::array<DigitMask, MAX_DIGITS> digit_masks)
+{
+    for (auto &mask : digit_masks)
+    {
+        for (unsigned int i = 0; i < 7; ++i)
+        {
+            mask.toggle_segment(i);
+
+            auto [str_error, corrected_number] = to_string(digit_masks, false);
+            if (str_error == ParserError::OK && is_valid(corrected_number))
+            {
+                return {ParserError::OK, corrected_number};
+            }
+            
+            // revert change
+            mask.toggle_segment(i);
+        }
+    }
+
+    return {ParserError::NotValid, to_string(digit_masks, false).Value};
+}
+
 Result<ErrorCode, std::vector<std::string>> parse(const std::string &input, bool validate, bool auto_correct)
 {
     if (input.empty())
@@ -225,6 +270,17 @@ Result<ErrorCode, std::vector<std::string>> parse(const std::string &input, bool
                 if (error == ParserError::OK && !is_valid(result))
                 {
                     error = ParserError::NotValid;
+
+                    if (auto_correct)
+                    {
+                        auto [correction_error, corrected_number] = auto_correction(digit_masks);
+    
+                        if (correction_error == ParserError::OK)
+                        {
+                            result = corrected_number;
+                            error = ParserError::OK;
+                        }
+                    }
                 }
 
                 result += ERROR_MESSAGES.at(error);

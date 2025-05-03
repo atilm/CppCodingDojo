@@ -110,3 +110,14 @@ TEST_CASE("illegible digits override ambiguous segments in error message") {
     REQUIRE(result.Status == ErrorCode::SUCCESS);
     REQUIRE(result.Value == expected);
 }
+
+TEST_CASE("numbers which don't pass validation can be auto-corrected") {
+    std::string input = ""
+    "    _  _  _  _  _  _  _  _ \n"
+    "|_||_   ||_ | ||_|| || || |\n"
+    "  | _|  ||_||_||_||_||_||_|\n";
+    std::vector<std::string> expected = {"457508000"};
+    auto result = parse(input, true, true);
+    REQUIRE(result.Status == ErrorCode::SUCCESS);
+    REQUIRE(result.Value == expected);
+}
