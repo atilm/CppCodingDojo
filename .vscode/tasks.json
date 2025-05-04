@@ -2,20 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Git Commit All",
-            "type": "shell",
-            "command": "git add . && git commit -m 'Auto-commit'",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "Commits all changed and added files with a default commit message."
-        },
-        {
             "label": "Build Project",
             "type": "shell",
-            "command": "cmake --build /workspaces/CppCodingDojo/Debug",
+            "command": "cmake --build /workspaces/CppCodingDojo/build",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -39,12 +28,11 @@
             "type": "shell",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Git Commit All",
                 "Build Project",
                 "Run Catch2 Tests and Log Failures"
             ],
             "problemMatcher": [],
-            "detail": "Runs the 'Git Commit All' task followed by the 'Run Catch2 Tests and Log Failures' task."
+            "detail": "Runs the 'Build Project' task followed by the 'Run Catch2 Tests and Log Failures' task."
         },
     ]
 }
