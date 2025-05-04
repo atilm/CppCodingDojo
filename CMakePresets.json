@@ -10,7 +10,7 @@
           "name": "debug",
           "description": "Debug configuration",
           "generator": "Unix Makefiles",
-          "binaryDir": "${sourceDir}/Debug",
+          "binaryDir": "${sourceDir}/build",
           "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Debug"
           }

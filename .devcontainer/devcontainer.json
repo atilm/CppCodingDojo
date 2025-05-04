@@ -6,7 +6,8 @@
         "extensions": [
             "ms-vscode.cpptools-extension-pack",
             "ms-vscode.cmake-tools",
-            "ms-vscode.cmake-tools-helper"
+            "ms-vscode.cmake-tools-helper",
+            "matepek.vscode-catch2-test-adapter"
         ]
       }
     }
